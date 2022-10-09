@@ -8,7 +8,6 @@ const readFilePromise = () => {
         return;
       }
       resolve(JSON.parse(data));
-      //  resolve (JSON.parse(JSON.stringify(data))); ahora el err es users.push not a funcion
     });
   });
 };

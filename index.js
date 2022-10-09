@@ -1,31 +1,6 @@
 const prompts = require("prompts");
 const files = require("./files");
 
-/*
-const questions = [
-  {
-    type: "text",
-    name: "username",
-    message: "Ingresa tu usuario",
-  },
-  {
-    type: "text",
-    name: "concepto",
-    message: "ingresa el concepto del gasto"
-  },
-  {
-    type: "number",
-    name: "importe",
-    message: "importe",
-  },
-];
-
-(async () => {
-  const response = await prompts(questions);
-
-  // => response => { username, concepto, importe }
-})();
-*/
 const run = async () => {
   const commandSelected = await prompts({
     type: "select",
@@ -37,7 +12,12 @@ const run = async () => {
         description: "Create new user profile",
         value: "create",
       },
-      { title: "Listar usuarios", description: "List all users", value: "list" },
+      {
+        title: "Listar usuarios",
+        description: "List all users",
+        value: "list",
+      },
+      { title: "Cerrar", description: "Close", value: "close" },
     ],
     initial: 0,
   });
@@ -50,17 +30,24 @@ const run = async () => {
         message: "Nombre de usuario: ",
       },
       { type: "text", name: "concepto", message: "Concepto del gasto" },
-      { type: "number", name: "importe", message: "Importe del gasto" }
+      { type: "number", name: "importe", message: "Importe del gasto" },
     ]);
-    // console.log(userData)
-    const users = await files.readFilePromise();
-    users.push(userData);
-    await files.writeFilePromise(users);
-    return;
+
+    try {
+      const users = await files.readFilePromise();
+      users.push(userData);
+      await files.writeFilePromise(users);
+      return;
+    } catch (error) {
+      throw error;
+    }
   }
   if (commandSelected.value == "list") {
     const users = await files.readFilePromise();
     console.log(users);
+    return;
+  }
+  if (commandSelected.value == "close") {
     return;
   }
 };
